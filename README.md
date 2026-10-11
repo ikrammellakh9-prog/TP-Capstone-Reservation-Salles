@@ -1,44 +1,27 @@
-# TP Capstone : Système Complet de Gestion & Réservation de Salles avec Détection de Conflits Métier (JPA / Hibernate)
+# TP Capstone : SystÃ¨me Complet de Gestion & RÃ©servation de Salles (Ikram Mellakh)
 
-Projet d'intégration et de synthèse pour l'ingénierie des applications d'entreprise avec **JPA 2.2** et **Hibernate 5.6**. Ce projet modélise un système d'allocation de ressources partagées (amphithéâtres, laboratoires, salles de réunion) avec prévention transactionnelle des conflits d'horaires.
-
-Réalisé par : **Ikram Mellakh**
-
----
-
-## 1. Fonctionnalités et Architecture du Système
-
-1. **Modèle de Données Riche** :
-   - Entité `CollaborateurDemandeur` : demandeur d'espaces avec matricule et département.
-   - Entité `EspaceSalle` & `DispositifEquipement` : relation `@ManyToMany` modélisant l'infrastructure matérielle (visioconférence, bornes interactives).
-   - Objet Valeur `@Embeddable` `PlageHoraire` : encapsulateur de temporalité (`dateHeureDebut`, `dateHeureFin`) avec validation d'invariance.
-   - Entité centrale `ReservationEspace` avec énumération d'état `EtatReservation` (`CONFIRMEE`, `EN_ATTENTE`, `ANNULEE`).
-
-2. **Couche Service & Règles Métier Avancées** :
-   - Détection mathématique stricte de chevauchement temporel via JPQL :
-     `r.plageHoraire.dateHeureDebut < :fin AND r.plageHoraire.dateHeureFin > :debut`
-   - Levée d'exception personnalisée `ConflitReservationException` lors d'une tentative de réservation concurrente.
-   - Algorithme de recherche d'espaces alternatifs éligibles et disponibles par sous-requête corrélée `NOT IN`.
-   - Cycle de vie complet : création, confirmation, gestion d'annulation avec audit.
+Projet d'ingÃ©nierie JPA / Hibernate modÃ©lisant un systÃ¨me de gestion d'amphithÃ©Ã¢tres et laboratoires :
+- EntitÃ©s `CollaborateurDemandeur`, `EspaceSalle`, `DispositifEquipement` (`@ManyToMany`)
+- Composant temporel `@Embeddable` `PlageHoraire`
+- DÃ©tection mathÃ©matique stricte de chevauchement temporel via JPQL
+- Gestion des annulations et recherche d'espaces alternatifs disponibles (`NOT IN`)
 
 ---
 
-## 2. Captures d'Écran et Validation
+## Captures d'Ã‰cran IntelliJ IDEA & Terminal CMD
 
-### Service Métier de Réservation & Détection de Conflits
-![Service Metier](docs/images/01-service-reservation.png)
+### 1. Service MÃ©tier de RÃ©servation & DÃ©tection de Conflit (IntelliJ IDEA)
+![Service RÃ©servation](docs/images/01-intellij-service-reservation.png)
 
-### Modèle Entités & Composant Embeddable PlageHoraire
-![Modele Entites](docs/images/02-entities-model.png)
+### 2. EntitÃ© ReservationEspace & PlageHoraire Embeddable (IntelliJ IDEA)
+![EntitÃ© RÃ©servation](docs/images/02-intellij-entity-reservation.png)
 
-### Exécution Complète du Scénario Métier (PowerShell Terminal)
-![Execution Terminal](docs/images/03-execution-cmd.png)
+### 3. RÃ©sultat des Tests et ExÃ©cution (CMD / PowerShell)
+![RÃ©sultat ExÃ©cution CMD](docs/images/03-cmd-test-result.png)
 
 ---
 
-## 3. Commandes d'Exécution
-
+## Lancement
 ```bash
-mvn clean compile
-mvn exec:java "-Dexec.mainClass=ma.enset.ikram.capstone.App"
+mvn clean compile exec:java -Dexec.mainClass=ma.enset.ikram.capstone.App
 ```
